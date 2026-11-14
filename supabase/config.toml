@@ -1,0 +1,62 @@
+# Supabase CLI configuration for local development (supabase start) and
+# function deploys. Hosted-project settings (auth URLs, Google OAuth) are
+# configured in the dashboard; see README.md.
+project_id = "meetzy"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[realtime]
+enabled = true
+
+[storage]
+enabled = true
+file_size_limit = "1MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:5190"
+additional_redirect_urls = [
+  "http://localhost:5190",
+  "http://localhost:5190/**",
+  "http://localhost:5191",
+  "http://localhost:5191/**",
+]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+[auth.external.google]
+enabled = false
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+redirect_uri = ""
+skip_nonce_check = false
+
+[edge_runtime]
+enabled = true
+policy = "per_worker"
+
+# Edge Functions are written in plain JavaScript; the entrypoint setting
+# points the CLI at index.js instead of the default index.ts.
+[functions.compute-meetup]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/compute-meetup/index.js"
+
+[functions.venue-routes]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/venue-routes/index.js"
